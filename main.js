@@ -1,57 +1,48 @@
-const firstSlider = document.querySelector(".first-slider");
-const secondSlider = document.querySelector(".second-slider-carousel");
+const firstSlickSlider = document.querySelector(".first-slick-slider");
+const secondSlickSliderBig = document.querySelector(".second-slick-slider-big");
+const secondSlickSliderSmall = document.querySelector(
+	".second-slick-slider-small"
+);
 
 function slideUpploadContent(slider) {
 	for (let i = 1; i < 12; i++) {
 		let div = document.createElement("div");
 		let img = document.createElement("img");
-		img.classList.add("owl-lazy");
 		// img.setAttribute("src", `img/${i}.jpg`);
 		// img.setAttribute("alt", `${i}.jpg`);
-		img.setAttribute("data-src", `img/${i}.jpg`);
+		img.setAttribute("data-lazy", `img/${i}.jpg`);
 		div.prepend(img);
 		slider.prepend(div);
 	}
 }
 
-if (firstSlider) {
-	slideUpploadContent(firstSlider);
+if (firstSlickSlider) {
+	slideUpploadContent(firstSlickSlider);
 }
-if (secondSlider) {
-	slideUpploadContent(secondSlider);
+if (secondSlickSliderBig && secondSlickSliderSmall) {
+	slideUpploadContent(secondSlickSliderBig);
+	slideUpploadContent(secondSlickSliderSmall);
 }
 
 $(document).ready(function () {
-	$(".first-slider").owlCarousel({
-		items: 1,
-		loop: true,
-		lazyLoad: true,
-		lazyLoadEager: 2,
+	$(".first-slick-slider").slick({
+		lazyLoad: "ondemand",
+		dots: true,
+		slidesToShow: 1,
+		fade: true,
 	});
-
-	var secondSliderCurrent = $(".second-slider-current");
-
-	$(".second-slider-carousel")
-		.owlCarousel({
-			loop: true,
-			lazyLoad: true,
-			lazyLoadEager: 2,
-			dots: false,
-			center: true,
-			mouseDrag: false,
-		})
-		.on("changed.owl.carousel", changeSecondSliderCurrent);
-
-	function changeSecondSliderCurrent() {
-		secondSliderCurrent.empty();
-
-		var secondSliderCarouselItems = $(".second-slider .owl-item");
-
-		secondSliderCarouselItems.each(function (index, item) {
-			if ($(this).hasClass("center")) {
-				$(this).clone().appendTo(secondSliderCurrent);
-			}
-		});
-	}
-	changeSecondSliderCurrent();
+	$(".second-slick-slider-big").slick({
+		lazyLoad: "ondemand",
+		asNavFor: ".second-slick-slider-small",
+		fade: true,
+		arrows: false,
+	});
+	$(".second-slick-slider-small").slick({
+		lazyLoad: "progressive",
+		asNavFor: ".second-slick-slider-big",
+		variableWidth: true,
+		focusOnSelect: true,
+		dots: true,
+		arrows: false,
+	});
 });
